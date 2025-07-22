@@ -2,4 +2,7 @@
 # Final Project Eq Ag 2025
 # Joss, Brooks, Rowan
 ---
-#crushing it
+# LOAD IN DATA
+# ------------------------------------------------------
+# 
+# MERGE DATA
