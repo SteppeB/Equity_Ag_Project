@@ -14,6 +14,7 @@ insurance <- R13894324_SL140
 migration <- R13894292_SL140
 demos <- ACSDT5Y2021_B03002_Data
 CalScreen <- data
+CPP <- CropAndPasturePct
 
 # create our total number of uninsured women 7-55 for each tract
 insurance$UninsuredWomen <- insurance$ACS21_5yr_B27001036 + insurance$ACS21_5yr_B27001039 + insurance$ACS21_5yr_B27001042 + insurance$ACS21_5yr_B27001045 + insurance$ACS21_5yr_B27001048
@@ -38,8 +39,13 @@ ImmigrantPop <- migration[, c("Geo_Id", "MigrantPop")]
 insurance$Geo_Id <- substr(insurance$Geo__geoid_, 2, 11)
 JW <- insurance[, c("Geo_Id", "UninsuredWomen")]
 
+# And for crop pasture
+CPP$Geo_Id <- substr(CPP$GEOID, 2, 11)
+CropPasturePct <- CPP[, c("Geo_Id", "CropPasturePct")]
+
 # Mergin tables by geo id
-m1 <- merge(CalFilter, LatinoPop, by = "Geo_Id")
+m0 <- merge(CalFilter, CropPasturePct, by = "Geo_Id")
+m1 <- merge(m0, LatinoPop, by = "Geo_Id")
 m2 <- merge(m1, ImmigrantPop, by = "Geo_Id")
 m3 <- merge(m2, JW, by = "Geo_Id")
 
@@ -52,7 +58,5 @@ m3$LatinoPct <- 100*(m3$LatinoPop / m3$`Total Population`)
 m3$MigrantPct <- 100*(m3$MigrantPop / m3$`Total Population`)
 
 # Just cleaning up by filtering out base population data
-RegTable <- m3[, -c(10, 11, 12)]
+RegTable <- m3[, -c(11, 12, 13)]
 
-# Regression
-Regression <- lm(data = RegTable)
