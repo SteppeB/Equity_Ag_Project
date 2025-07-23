@@ -16,6 +16,7 @@ demos <- ACSDT5Y2021_B03002_Data
 CalScreen <- data
 CPP <- CropAndPasturePct
 
+
 # create our total number of uninsured women 7-55 for each tract
 insurance$UninsuredWomen <- insurance$ACS21_5yr_B27001036 + insurance$ACS21_5yr_B27001039 + insurance$ACS21_5yr_B27001042 + insurance$ACS21_5yr_B27001045 + insurance$ACS21_5yr_B27001048
 
@@ -41,7 +42,7 @@ JW <- insurance[, c("Geo_Id", "UninsuredWomen")]
 
 # And for crop pasture
 CPP$Geo_Id <- substr(CPP$GEOID, 2, 11)
-CropPasturePct <- CPP[, c("Geo_Id", "CropPasturePct")]
+CropPasturePct <- CPP[, c("Geo_Id", "CropPasturePct", "LandSqKm")]
 
 # Mergin tables by geo id
 m0 <- merge(CalFilter, CropPasturePct, by = "Geo_Id")
@@ -56,7 +57,28 @@ m3$UninsuredPct <- 100*(m3$UninsuredWomen / m3$`Total Population`)
 m3$LatinoPop <- as.numeric(m3$LatinoPop)
 m3$LatinoPct <- 100*(m3$LatinoPop / m3$`Total Population`)
 m3$MigrantPct <- 100*(m3$MigrantPop / m3$`Total Population`)
+m3$PopulationDensity <- as.numeric(m3$`Total Population`/m3$LandSqKm)
 
 # Just cleaning up by filtering out base population data
 RegTable <- m3[, -c(11, 12, 13)]
 
+# Checking correlation in migrant and hispanic % tables
+cor.test(RegTable$LatinoPct, RegTable$MigrantPct)
+
+# Visualizing the correlation
+ML <- ggplot(RegTable, aes(x = LatinoPct, y = MigrantPct)) +
+  geom_point(color = "blue", alpha = 0.6) +
+  geom_smooth(method = "lm", color = "red", se = FALSE) +
+  labs(title = "Scatterplot of LatinoPct vs MigrantPct") +
+  theme_minimal()
+
+# What about population density vs crop pasture percent
+cor.test(RegTable$LatinoPct, RegTable$MigrantPct)
+RegTable$CropPasturePct <- as.numeric(RegTable$CropPasturePct)
+cor.test((RegTable$PopulationDensity), (RegTable$CropPasturePct))
+
+ML <- ggplot(RegTable, aes(x = PopulationDensity, y = CropPasturePct)) +
+  geom_point(color = "blue", alpha = 0.6) +
+  geom_smooth(method = "lm", color = "red", se = FALSE) +
+  labs(title = "Scatterplot of LatinoPct vs MigrantPct") +
+  theme_minimal()
