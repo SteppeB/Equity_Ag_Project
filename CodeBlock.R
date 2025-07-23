@@ -96,4 +96,15 @@ plot(x = RegTable$Pesticides, y = RegTable$`Low Birth Weight`)
 # --------------------------------------------------
 # LOG-TRANSFORMED DATA
 # --------------------------------------------------
-RegTable$logpop <- log10(RegTable$)
+RegTable$logpop <- log10(RegTable$PopulationDensity)
+RegTable$asinh <- asinh(RegTable$PopulationDensity)
+# --------------------------------------------------
+# ANOVA (Pesticides, LBW, Latino)
+# --------------------------------------------------
+RegTable$`Low Birth Weight` <- as.numeric(RegTable$`Low Birth Weight`)
+aov_result <- RegTable %>%
+  filter(!is.na(`Low Birth Weight`)) %>%
+  aov(`Low Birth Weight` ~ Pesticides + Education + CropPasturePct + UninsuredPct + LatinoPct + asinh, data = .)
+# --------------------------------------------------
+summary(aov_result)
+
