@@ -82,3 +82,18 @@ ML <- ggplot(RegTable, aes(x = PopulationDensity, y = CropPasturePct)) +
   geom_smooth(method = "lm", color = "red", se = FALSE) +
   labs(title = "Scatterplot of LatinoPct vs MigrantPct") +
   theme_minimal()
+# --------------------------------------------------
+# LINEAR REGRESSION
+# --------------------------------------------------
+summary(RegTable[,c("Low Birth Weight", "LatinoPct", "UninsuredPct", "CropPasturePct", "Pesticides")])
+# --------------------------------------------------
+# ANNA ATTEMPT
+# --------------------------------------------------
+subset_table_data <- RegTable[,c("Low Birth Weight", "LatinoPct", "UninsuredPct", "CropPasturePct", "Pesticides")]
+summary(subset_table_data)
+# -------------------------------------------------- 
+plot(x = RegTable$Pesticides, y = RegTable$`Low Birth Weight`)
+# --------------------------------------------------
+# LOG-TRANSFORMED DATA
+# --------------------------------------------------
+RegTable$logpop <- log10(RegTable$)
