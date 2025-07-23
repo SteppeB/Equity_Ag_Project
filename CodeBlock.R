@@ -107,4 +107,18 @@ aov_result <- RegTable %>%
   aov(`Low Birth Weight` ~ Pesticides + Education + CropPasturePct + UninsuredPct + LatinoPct + asinh, data = .)
 # --------------------------------------------------
 summary(aov_result)
+# --------------------------------------------------
+# RESULTS
+# summary(aov_result)
+# Df Sum Sq Mean Sq F value   Pr(>F)    
+# Pesticides        1     11   10.79   4.642   0.0312 *  
+# Education       615   3311    5.38   2.317  < 2e-16 ***
+# CropPasturePct    1     79   78.98  {33.993} 5.82e-09 ***
+# UninsuredPct      1      0    0.20   0.088   0.7666    
+# LatinoPct         1     14   13.65   5.877   0.0154 *  
+# asinh (popdense)  1     91   90.90  39.124 4.25e-10 ***
+# Residuals      6057  14073    2.32                     
+
+# Signif. codes:  0 ‘***’ 0.001 ‘**’ 0.01 ‘*’ 0.05 ‘.’ 0.1 ‘ ’ 1
+# ----------------------------------------------------
 
