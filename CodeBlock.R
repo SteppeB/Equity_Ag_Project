@@ -6,6 +6,7 @@
 library(arrow)
 library(dplyr)
 library(tidyverse)
+class(df)
 
 # Import data (calenviroscreen, hispanic (B03002) immigration data (R...292) and insurance coverage (R...324))
 
@@ -120,5 +121,38 @@ summary(aov_result)
 # Residuals      6057  14073    2.32                     
 
 # Signif. codes:  0 ‘***’ 0.001 ‘**’ 0.01 ‘*’ 0.05 ‘.’ 0.1 ‘ ’ 1
-# ----------------------------------------------------
+# ---------------------------------------------------
+# INTERPRETATION: 
 
+# ---------------------------------------------------
+# New Variable: pesticide x pasture
+# ---------------------------------------------------
+RegTable <- RegTable %>%
+  mutate (PP = Pesticides * CropPasturePct)
+# ---------------------------------------------------
+# NEW ANOVA
+# ---------------------------------------------------
+AR <- RegTable %>%
+  filter(!is.na(`Low Birth Weight`)) %>%
+  aov(`Low Birth Weight` ~  Education + Pesticides + CropPasturePct + PP + UninsuredPct + LatinoPct + asinh, data = .)
+# ---------------------------------------------------
+# SUMMARY
+# ---------------------------------------------------
+summary(AR)
+# ---------------------------------------------------
+# RESULTS
+# ---------------------------------------------------
+# summary(AR)
+# Df Sum Sq Mean Sq F value   Pr(>F)    
+# Education       615   3288    5.35   2.301  < 2e-16 ***
+# Pesticides        1     34   33.70  14.505 0.000141 ***
+# CropPasturePct    1     79   78.98  33.994 5.81e-09 ***
+# PP                1      4    3.94   1.697 0.192759    
+# UninsuredPct      1      0    0.24   0.102 0.749519    
+# LatinoPct         1     13   13.21   5.685 0.017142 *  
+#  asinh             1     90   90.17  38.813 4.98e-10 ***
+# Residuals      6056  14070    2.32                     
+# Signif. codes:  0 ‘***’ 0.001 ‘**’ 0.01 ‘*’ 0.05 ‘.’ 0.1 ‘ ’ 1
+# ---------------------------------------------------
+# INTERPRETATION: 
+# ---------------------------------------------------
