@@ -241,4 +241,14 @@ summary(lm_below)
 #                             OBSERVATIONS
 # -----------------------------------------------------
 #     PESTICIDES: small negative coefficient (-.00055), holding everything else constant, increasing pesticide use is slighty associated with lower birth weight but it's not significant (p = 0.142).
-#     CROPPASTUREPCT: 
+#     CROPPASTUREPCT: negative (-0.0131), significant at 0.01 level - more cropland is associated with lower birth weight rates in higher-density tracts
+#     PESTICIDES X CROPPASTUREPCT: small positive (0.000074), signigicant (p = 0.0157) meaning the effects on low birth weight gets more positive as cropland % increases
+
+#     CONTROLS:
+#       Education: significant and negative, more education -> lower rates of lower birth weight
+#       LatinoPct & UninsuredPct: positive and significant, higher % Latino or unisured -> higher rate of lower birth rate
+# ------------------------------------------------------
+# BELOW MEDIAN SUMMARY
+# ------------------------------------------------------
+summary(lm_below)
+# ------------------------------------------------------
