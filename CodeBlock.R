@@ -236,7 +236,7 @@ summary(lm_below)
 # Education                        -0.02279  
 # LatinoPct                         0.02120  
 # UninsuredPct                      0.03003 
-# Low Birth Weight=2.45−0.00055⋅Pesticides−0.0131⋅CropPasturePct+0.000074⋅(Pesticides×CropPasturePct) −0.0228⋅Education+0.0212⋅LatinoPct+0.0300⋅UninsuredPct
+# REGRESSION EQUATION: Low Birth Weight=2.45−0.00055⋅Pesticides−0.0131⋅CropPasturePct+0.000074⋅(Pesticides×CropPasturePct) −0.0228⋅Education+0.0212⋅LatinoPct+0.0300⋅UninsuredPct
 # -----------------------------------------------------
 #                             OBSERVATIONS
 # -----------------------------------------------------
@@ -252,3 +252,14 @@ summary(lm_below)
 # ------------------------------------------------------
 summary(lm_below)
 # ------------------------------------------------------
+# BELOW MEDIAN POP
+# ------------------------------------------------------
+# (Intercept)                     = 3.18181  
+# Pesticides                     = -0.0003556  
+# CropPasturePct                 = -0.0211287  
+# Pesticides:CropPasturePct      =  0.0000734  
+# Education                      = -0.0235887  
+# LatinoPct                      =  0.0136097  
+# UninsuredPct                   =  0.0373833  
+# REGRESSION EQUATION: Low Birth Weight=3.18−0.00036⋅Pesticides−0.0211⋅CropPasturePct+0.000073⋅(Pesticides×CropPasturePct)−0.0236⋅Education+0.0136⋅LatinoPct+0.0374⋅UninsuredPct
+# -------------------------------------------------------
