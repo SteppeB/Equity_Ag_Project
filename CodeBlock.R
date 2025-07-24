@@ -185,3 +185,11 @@ RegTable$PesticideBin <- cut(RegTable$Pesticide_jitter, breaks = quantile(RegTab
 # CREATE VIOLIN PLOT
 # ----------------------------------------------------
 ggplot(RegTable, aes(x = PesticideBin, y = 'Low Birth Weight', fill = PesticideBin)) + geom_violin(trim = FALSE, alpha = 0.7, color = "gray30") + stat_summary(fun = mean, geom = "point", shape = 20, size = 3, color = "black") + facet_wrap(~ PopGroup) + labs(title = "Low Birth Weight by Pesticide Exposure and Population Density", x = "Pesticide Exposure (Quartiles)", y = "Low Birth Weight (%)") + theme_minimal() + theme(legend.position = "none", strip.text = element_text(face = "bold"))
+# ----------------------------------------------------
+# INTERPRET VIOLIN
+# ----------------------------------------------------
+# X-axis: 4 bins of pesticide exposure: "Low" → "High"
+# Y-axis: % of low birth weight
+# Facets: Split into "Above Median" and "Below Median" population density
+# Violin shape: Distribution of LBW across tracts in each bin
+# Black dot: Mean low birth weight for that bin
