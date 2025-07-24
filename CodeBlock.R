@@ -7,6 +7,8 @@ library(arrow)
 library(magrittr)
 library(dplyr)
 library(tidyverse)
+library(ggplot)
+library(ggplot2)
 
 # Import data (calenviroscreen, hispanic (B03002) immigration data (R...292) and insurance coverage (R...324))
 
@@ -159,9 +161,27 @@ summary(AR)
 # ---------------------------------------------------
 interaction.plot(x.factor = RegTable$Pesticides, trace.factor = RegTable$CropPasturePct, response = RegTable$`Low Birth Weight`, fun = mean, type = "b", col = c("red", "blue"), pch = c(1, 19), xlab = "Pesticides", ylab = "Mean of Response", legend = TRUE)
 # ---------------------------------------------------
-# WHAT IS THIS
+# FILTER OUT MISSING BIRTH WEIGHT / RUN LINEAR REGRESSION MODEL (OLS)
 ols <- RegTable %>%
   filter(!is.na(`Low Birth Weight`)) %>%
   lm(`Low Birth Weight` ~  Education + Pesticides + CropPasturePct + PP + UninsuredPct + LatinoPct + asinh, data = .)
 summary(ols)
-
+# ----------------------------------------------------
+# GROUP TRACTS BY POPULATION DENSITY
+# ----------------------------------------------------
+RegTable$PopGroup <- ifelse(RegTable$PopulationDensity > median(RegTable$PopulationDensity, na.rm = TRUE), "Above Median", "Below Median")
+# ----------------------------------------------------
+# BIN PESTICIDE LEVELS INTO QUARTILES
+#-----------------------------------------------------
+RegTables$PesticideBin <- cut(RegTable$Pesticides, breaks = quantile(RegTable$Pesticides, probs = seq(0, 1, 0.25), na.rm = TRUE), include.lowest = TRUE, labels = c("Low", "Medium_High", "High"))
+# SLIGHT JITTER TO PESTICIDE VALUES (ONLY FOR BINNING/PLOTTING)
+# ----------------------------------------------------
+RegTable$Pesticide_jitter <- jitter(RegTable$Pesticides, amount = 0.01)
+# ----------------------------------------------------
+# TRY BINNING AGAIN WITH JITTERED VALUES
+# ----------------------------------------------------
+RegTable$PesticideBin <- cut(RegTable$Pesticide_jitter, breaks = quantile(RegTable$Pesticide_jitter, probs = seq(0, 1, 0.25), na.rm = TRUE), include.lowest = TRUE, labels = c("Low", "Medium-Low", "Medium-High", "High"))
+# ----------------------------------------------------
+# CREATE VIOLIN PLOT
+# ----------------------------------------------------
+ggplot(RegTable, aes(x = PesticideBin, y = 'Low Birth Weight', fill = PesticideBin)) + geom_violin(trim = FALSE, alpha = 0.7, color = "gray30") + stat_summary(fun = mean, geom = "point", shape = 20, size = 3, color = "black") + facet_wrap(~ PopGroup) + labs(title = "Low Birth Weight by Pesticide Exposure and Population Density", x = "Pesticide Exposure (Quartiles)", y = "Low Birth Weight (%)") + theme_minimal() + theme(legend.position = "none", strip.text = element_text(face = "bold"))
