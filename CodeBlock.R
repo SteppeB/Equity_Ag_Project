@@ -9,7 +9,8 @@ library(dplyr)
 library(tidyverse)
 library(ggplot)
 library(ggplot2)
-
+install.packages("ggeffects")
+library(ggeffects)
 # Import data (calenviroscreen, hispanic (B03002) immigration data (R...292) and insurance coverage (R...324))
 
 # Create datasets and filtering out what we want
@@ -263,3 +264,10 @@ summary(lm_below)
 # UninsuredPct                   =  0.0373833  
 # REGRESSION EQUATION: Low Birth Weight=3.18−0.00036⋅Pesticides−0.0211⋅CropPasturePct+0.000073⋅(Pesticides×CropPasturePct)−0.0236⋅Education+0.0136⋅LatinoPct+0.0374⋅UninsuredPct
 # -------------------------------------------------------
+# ggplot2 WITH REGRESSION LINE AND CONFIDENCE BAND
+# -------------------------------------------------------
+predicated <- ggpredict(lm_above, terms = c("Pesticides [all]"))
+# -------------------------------------------------------
+# PLOT PREDICTIONS
+# -------------------------------------------------------
+ggplot(predicted, aes(x = x, y = predicted)) + geom_line
