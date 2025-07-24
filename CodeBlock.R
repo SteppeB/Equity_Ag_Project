@@ -193,3 +193,52 @@ ggplot(RegTable, aes(x = PesticideBin, y = 'Low Birth Weight', fill = PesticideB
 # Facets: Split into "Above Median" and "Below Median" population density
 # Violin shape: Distribution of LBW across tracts in each bin
 # Black dot: Mean low birth weight for that bin
+# no clear answer*
+# ----------------------------------------------------
+# CLEAN UP PLOT
+# ----------------------------------------------------
+ggplot(RegTable, aes(x = PesticideBin, y = `Low Birth Weight`, fill = PesticideBin)) + geom_violin(trim = FALSE, alpha = 0.8, color = "gray30") + geom_jitter(width = 0.1, size = 0.5, alpha = 0.2, color = "black") + stat_summary(fun = mean, geom = "point", shape = 21, size = 3, fill = "white", color = "black") + facet_wrap(~ PopGroup) + labs(title = "Low Birth Weight by Pesticide Exposure (Grouped by Population Density)", subtitle = "Black dots = Mean; Each violin = distribution across census tracts", x = "Pesticide Exposure (Quartiles)", y = "Low Birth Weight (%)") + scale_fill_brewer(palette = "Set2") + theme_minimal(base_size = 14) + theme(legend.position = "none", strip.text = element_text(face = "bold", size = 14), axis.text.x = element_text(angle = 20, hjust = 1))
+# ----------------------------------------------------
+# CLEAN AGAIN
+# ----------------------------------------------------
+cleaned_data <- RegTable %>%
+  filter(!is.na(`Low Birth Weight`),
+    !is.na(Pesticides),
+    !is.na(CropPasturePct),
+    !is.na(Education),
+    !is.na(UninsuredPct),
+    !is.na(LatinoPct),
+    !is.na(PopGroup))
+# -----------------------------------------------------
+# RUN SEPARATE MODELS FOR EACH POPULATION GROUP
+# -----------------------------------------------------
+#         HIGH-DENSITY GROUP
+# -----------------------------------------------------
+lm_above <- lm(`Low Birth Weight` ~ Pesticides * CropPasturePct + Education + LatinoPct + UninsuredPct, data = cleaned_data[cleaned_data$PopGroup == "Above Median", ])
+# -----------------------------------------------------
+#         LOW-DENSITY GROUP
+# -----------------------------------------------------
+lm_below <- lm(`Low Birth Weight` ~ Pesticides * CropPasturePct + Education + LatinoPct + UninsuredPct, data = cleaned_data[cleaned_data$PopGroup == "Below Median", ])
+# -----------------------------------------------------
+#   VIEW AND INTERPRET RESULTS
+# -----------------------------------------------------
+summary(lm_above)
+summary(lm_below)
+# -----------------------------------------------------
+# WRITE OUT LINEAR REGRESSION EQUATIONS
+# -----------------------------------------------------
+#         ABOVE MEDIAN POP
+# -----------------------------------------------------
+# (Intercept)                       2.44733  
+# Pesticides                       -0.00055  
+# CropPasturePct                   -0.01312  
+# Pesticides:CropPasturePct        0.000074  
+# Education                        -0.02279  
+# LatinoPct                         0.02120  
+# UninsuredPct                      0.03003 
+# Low Birth Weight=2.45−0.00055⋅Pesticides−0.0131⋅CropPasturePct+0.000074⋅(Pesticides×CropPasturePct) −0.0228⋅Education+0.0212⋅LatinoPct+0.0300⋅UninsuredPct
+# -----------------------------------------------------
+#                             OBSERVATIONS
+# -----------------------------------------------------
+#     PESTICIDES: small negative coefficient (-.00055), holding everything else constant, increasing pesticide use is slighty associated with lower birth weight but it's not significant (p = 0.142).
+#     CROPPASTUREPCT: 
