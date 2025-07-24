@@ -4,9 +4,9 @@
 
 # LOAD IN DATA
 library(arrow)
+library(magrittr)
 library(dplyr)
 library(tidyverse)
-class(df)
 
 # Import data (calenviroscreen, hispanic (B03002) immigration data (R...292) and insurance coverage (R...324))
 
@@ -122,8 +122,7 @@ summary(aov_result)
 
 # Signif. codes:  0 ‘***’ 0.001 ‘**’ 0.01 ‘*’ 0.05 ‘.’ 0.1 ‘ ’ 1
 # ---------------------------------------------------
-# INTERPRETATION: 
-
+# INTERPRETATION: being near a pasture matters but pesticides doesn't?
 # ---------------------------------------------------
 # New Variable: pesticide x pasture
 # ---------------------------------------------------
@@ -154,5 +153,15 @@ summary(AR)
 # Residuals      6056  14070    2.32                     
 # Signif. codes:  0 ‘***’ 0.001 ‘**’ 0.01 ‘*’ 0.05 ‘.’ 0.1 ‘ ’ 1
 # ---------------------------------------------------
-# INTERPRETATION: 
+# INTERPRETATION: pesticides are more impactful now??
 # ---------------------------------------------------
+# NANCY DREWING ON THE PP - FAIL
+# ---------------------------------------------------
+interaction.plot(x.factor = RegTable$Pesticides, trace.factor = RegTable$CropPasturePct, response = RegTable$`Low Birth Weight`, fun = mean, type = "b", col = c("red", "blue"), pch = c(1, 19), xlab = "Pesticides", ylab = "Mean of Response", legend = TRUE)
+# ---------------------------------------------------
+# WHAT IS THIS
+ols <- RegTable %>%
+  filter(!is.na(`Low Birth Weight`)) %>%
+  lm(`Low Birth Weight` ~  Education + Pesticides + CropPasturePct + PP + UninsuredPct + LatinoPct + asinh, data = .)
+summary(ols)
+
